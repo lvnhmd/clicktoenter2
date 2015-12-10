@@ -106,50 +106,7 @@
     
   <div class="clear"></div>
   
-  <div id="sorting-hat" class="desktop-12">
-    <ul id="sortme"> 
-    </ul>  
-                   
-     
-<script>
-  /* Product Tag Filters - Good for any number of filters on any type of collection pages */
-  /* Give you product tag filter select element a class of coll-filter */
-  /* Give your collection select a class of coll-picker */
-  /* Brought to you by Caroline Schnapp */
-  var allFilters = jQuery('.coll-filter, .coll-picker');
-  allFilters.change(function() {
-    var newTags = [];
-    jQuery('.coll-filter').each(function() { 
-      if (jQuery(this).val()) {
-        newTags.push(jQuery(this).val());
-      }
-    });
-    if (newTags.length) {
-      var query = newTags.join('+');
-      if (jQuery('.coll-picker').length) {
-        window.location.href = '/collections/' + jQuery('.coll-picker').val() + '/' + query;
-      }
-      else {
-        window.location.href = jQuery('<a title="Show products matching tag tag" href="/collections/desktop-and-stationery/tag">tag</a>').attr('href').replace('tag', query);
-      }
-    } 
-    else {
-      if (jQuery('.coll-picker').length) {
-        window.location.href = '/collections/' + jQuery('.coll-picker').val();
-      }
-      else {
-        
-        window.location.href = '/collections/desktop-and-stationery';
-        
-      }
-    }
-  });
-</script>
-  </div>
-  
   <div id="product-loop" class="desktop-12 mobile-3">
-    
-    
     
     <div class="product-index desktop-4 tablet-2 mobile-3 first" id="prod-2432675907" data-alpha="Bicycles Zip Case" data-price="1600">          
       
