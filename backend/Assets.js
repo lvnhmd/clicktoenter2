@@ -20,6 +20,9 @@ module.exports = function(req, res) {
       case "jpg": contentType = "image/jpeg"; break;
       case "jpeg": contentType = "image/jpeg"; break;
       case "png": contentType = "image/png"; break;
+      case "ttf": contentType = "application/x-font-ttf"; break;
+      case "woff": contentType = "application/x-font-woff"; break;
+      case "svg": contentType = "image/svg+xml"; break;
       default: contentType = "text/plain";
     }
     res.writeHead(200, {'Content-Type': contentType});
