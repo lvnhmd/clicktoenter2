@@ -42,7 +42,6 @@
 	src:url('DM-webshop.eot');
 	src:url('DM-webshop.eot?#iefix') format('embedded-opentype'),
 		url('DM-webshop.woff') format('woff'),
-		url('DM-webshop.ttf') format('truetype'),
 		url('DM-webshop.svg?#DM-webshop') format('svg');
 	font-weight: normal;
 	font-style: normal;
