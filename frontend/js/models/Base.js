@@ -1,11 +1,10 @@
-
 var ajax = require('../lib/Ajax');
 module.exports = Ractive.extend({
   data: {
     value: null,
     url: ''
   },
-  fetch: function() {
+  fetch: function(cb) {
     var self = this;
     ajax.request({
       url: self.get('url'),
@@ -13,9 +12,74 @@ module.exports = Ractive.extend({
     })
     .done(function(result) {
       self.set('value', result);
+      if(cb) {
+        cb(null, result);
+      }
     })
     .fail(function(xhr) {
-      self.fire('Error fetching ' + self.get('url'))
+      self.set('value', null);
+      if(cb) {
+        cb({ error: 'Error loading ' + self.get('url')});
+      }
+    });
+    return this;
+  },
+  create: function(cb) {
+    var self = this;
+    ajax.request({
+      url: self.get('url'),
+      method: 'POST',
+      data: this.get('value'),
+      json: true
+    })
+    .done(function(result) {
+      if(cb) {
+        cb(null, result);
+      }
+    })
+    .fail(function(xhr) {
+      if(cb) {
+        cb(JSON.parse(xhr.responseText));
+      }
+    });
+    return this;
+  },
+  save: function(cb) {
+    var self = this;
+    ajax.request({
+      url: self.get('url'),
+      method: 'PUT',
+      data: this.get('value'),
+      json: true
+    })
+    .done(function(result) {
+      if(cb) {
+        cb(null, result);
+      }
+    })
+    .fail(function(xhr) {
+      if(cb) {
+        cb(JSON.parse(xhr.responseText));
+      }
+    });
+    return this;
+  },
+  del: function(cb) {
+    var self = this;
+    ajax.request({
+      url: self.get('url'),
+      method: 'DELETE',
+      json: true
+    })
+    .done(function(result) {
+      if(cb) {
+        cb(null, result);
+      }
+    })
+    .fail(function(xhr) {
+      if(cb) {
+        cb(JSON.parse(xhr.responseText));
+      }
     });
     return this;
   },
@@ -26,5 +90,11 @@ module.exports = Ractive.extend({
       }, { init: false });
     }
     return this;
+  },
+  setter: function(key) {
+    var self = this;
+    return function(v) {
+      self.set(key, v);
+    }
   }
 });

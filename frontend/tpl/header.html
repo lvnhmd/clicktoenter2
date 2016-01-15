@@ -1,6 +1,6 @@
 <div id="header" class="row">
     <div id="logo" class="desktop-6 tablet-4 mobile-3">
-        <a href="#"><img src="./static/images/logo_dm_webshop.svg" alt="Design Museum Shop" style="border: 0;"></a>
+        <a on-click="goto:home"><img src="./static/images/logo_dm_webshop.svg" alt="Design Museum Shop" style="border: 0;"></a>
     </div>
     <div id="search" class="desktop-3 tablet-1 mobile-6">
         <!-- http://designmuseumshop.com/search -->
@@ -12,7 +12,13 @@
     <ul id="cart" class="desktop-6 tablet-3 mobile-3">
         <!-- http://designmuseumshop.com/account/login -->
         <li>
-            <a href="#" id="customer_login_link">Sign in or create an account</a>
+            {{#if !isLogged }}
+                <a on-click="goto:login" id="customer_login_link">Sign in</a> |
+                <a on-click="goto:register" id="customer_signin_link">Create an account</a>
+            {{else}}
+                 <a on-click="goto:profile">My account</a> |
+                 <a on-click="goto:logout">Logout</a>   
+            {{/if}}
         </li>
         <!-- <li>
           <a href="http://designmuseumshop.com/cart">View cart: (<span class="cart-count">0</span>)</a>
@@ -20,3 +26,17 @@
     </ul>
 </div>
 <div class="clear"></div>
+
+
+<!-- <nav>
+  <ul>
+    <li><a on-click="goto:home">Home</a></li>
+    {{#if !isLogged }}
+      <li><a on-click="goto:register">Register</a></li>
+      <li><a on-click="goto:login">Login</a></li>
+    {{else}}
+      <li class="right"><a on-click="goto:logout">Logout</a></li>
+      <li class="right"><a on-click="goto:profile">Profile</a></li>
+    {{/if}}
+  </ul>
+</nav> -->
