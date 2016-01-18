@@ -74,6 +74,8 @@ Router
                 var user = result[0];
                 delete user.password;
                 delete user._id;
+                console.log('req ', req);
+                console.log('req.session ', req.session);
                 req.session.user = user;
                 response({
                   success: 'OK',
