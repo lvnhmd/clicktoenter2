@@ -12,6 +12,15 @@ Router
 	.add('api', API)
 	.add(Default)
 
+var session = require('cookie-session');
+var checkSession = function(req, res) {
+  session({
+    keys: ['clicktoenter']
+  })(req, res, function() {
+    process(req, res);
+  });
+}
+
 var process = function(req, res) {
 	Router.check(req.url, [req, res]);
 }

@@ -70,6 +70,7 @@ var showPage = function(newPage) {
 window.onload = function() {
 
   body = document.querySelector('body');
+  // Note that we missed the var keyword in front of the variable definition. This is how we make userModel available in the global scope.
   userModel = new UserModel();
   userModel.fetch(function(error, result) {
   Router
@@ -80,6 +81,23 @@ window.onload = function() {
     .add('register', function() {
       var p = new Register();
       showPage(p);
+    })
+    .add('login', function() {
+      var p = new Login();
+      showPage(p);
+    })
+    .add('logout', function() {
+      userModel.logout(function(error, result) {
+        window.location.href = '/';
+      });
+    })
+    .add('profile', function() {
+      if(userModel.isLogged()) {
+        var p = new Profile();
+        showPage(p);
+      } else {
+        Router.navigate('login');
+      }      
     })
     .add(function() {
       Router.navigate('home');
