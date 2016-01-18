@@ -5,3 +5,5 @@ home.js
 navigation.js
 app.js
 app.min.js
+login.js
+profile.js

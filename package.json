@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/lvnhmd/clicktoenter2#readme",
   "dependencies": {
+    "cookie-session": "^1.2.0",
     "font-awesome": "^4.5.0",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",

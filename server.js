@@ -1,5 +1,5 @@
 var http = require('http');
-var port = 8000;
+var port = 7000;
 
 var Assets = require('./backend/Assets');
 var API = require('./backend/API');
