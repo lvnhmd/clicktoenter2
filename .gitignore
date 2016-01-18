@@ -7,3 +7,5 @@ app.js
 app.min.js
 login.js
 profile.js
+register.js
+ractive.js

@@ -63,7 +63,7 @@ Router
           error('Please fill your password.', res);
         } else {
           getDatabaseConnection(function(db) {
-            var collection = db.collection('users');
+            var collection = db.collection('user');
             collection.find({
               email: data.email,
               password: sha1(data.password)
