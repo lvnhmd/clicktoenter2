@@ -1,3 +1,5 @@
+var Friends = require('../models/Friend');
+
 module.exports = Ractive.extend({
   template: require('../../tpl/profile'),
   components: {
@@ -5,17 +7,20 @@ module.exports = Ractive.extend({
     navigation: require('../views/Navigation'),
     appfooter: require('../views/Footer')
   },
-    onrender: function() {
+  data: {
+    friends: []
+  },
+  onrender: function() {
     var self = this;
     this.set(userModel.get('value'));
     this.on('updateProfile', function() {
       userModel.set('value.firstName', this.get('firstName'));
       userModel.set('value.lastName', this.get('lastName'));
-      if(this.get('password') != '') {
+      if (this.get('password') != '') {
         userModel.set('value.password', this.get('password'));
       }
       userModel.save(function(error, result) {
-        if(error) {
+        if (error) {
           self.set('error', error.error);
         } else {
           self.set('error', false);
@@ -24,11 +29,15 @@ module.exports = Ractive.extend({
       });
     });
     this.on('deleteProfile', function() {
-      if(confirm('Are you sure! Your account will be deleted permanently.')) {
+      if (confirm('Are you sure! Your account will be deleted permanently.')) {
         userModel.del(function() {
           window.location.href = '/';
         });
       }
-    })
+    });
+    var friends = new Friends();
+    friends.fetch(function(err, result) {
+      self.set('friends', result.friends);
+    });
   }
 });

@@ -76,6 +76,7 @@ Router
           email: data.email,
           password: sha1(data.password)
         }).toArray(function(err, result) {
+          console.log('API.js api/user/login ' + data.email + ' , ' + sha1(data.password));
           if(result.length === 0) {
             error('Wrong email or password', res);
           } else {
@@ -268,6 +269,7 @@ Router
   if(req.session && req.session.user) {
     getCurrentUser(function(user) {
       if(!user.friends || user.friends.length === 0) {
+        console.log('aww, no friends for ' + user.firstName);
         return response({ friends: [] }, res);
       }
       user.friends.forEach(function(value, index, arr) {
