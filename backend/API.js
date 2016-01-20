@@ -17,7 +17,7 @@ var getDatabaseConnection = function(callback) {
     callback(database);
     return;
   } else {
-    MongoClient.connect('mongodb://127.0.0.1:27017/nodejs-by-example', function(err, db) {
+    MongoClient.connect('mongodb://127.0.0.1:27017/clicktoenter', function(err, db) {
       if(err) {
         throw err;
       };
@@ -181,14 +181,14 @@ Router
   };
 })
 .add('api/friends/find', function(req, res) {
-  console.log('HELLO');
+  console.log('API.js api/friends/find');
   if(req.session && req.session.user) {
     if(req.method === 'POST') {
       var findFriends = function(db, searchFor, currentFriends) {
         var collection = db.collection('user');
         var regExp = new RegExp(searchFor, 'gi');
         var excludeEmails = [req.session.user.email];
-        console.log('excludeEmails ', excludeEmails);
+        console.log('search for ' + regExp + ' , excludeEmails ', excludeEmails);
         currentFriends.forEach(function(value, index, arr) {
           arr[index] = ObjectId(value);
         });
