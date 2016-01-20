@@ -1,5 +1,6 @@
 var sha1 = require('sha1');
 var ObjectId = require('mongodb').ObjectID;
+var fs = require('fs');
 
 var response = function(result, res) {
   res.writeHead(200, {'Content-Type': 'application/json'});
@@ -301,26 +302,83 @@ Router
 })
 .add('api/content', function(req, res) {
 
+//   var user;
+//   if(req.session && req.session.user) {
+//     user = req.session.user;
+//   } else {
+//     error('You must be logged in in order to use this method.', res);
+//   }
+
+//   switch(req.method) {
+//     case 'GET':
+//       getCurrentUser(function(user) {
+//         if (!user.friends) {
+//           user.friends = [];
+//         }
+//         getDatabaseConnection(function(db) {
+//           var collection = db.collection('content');
+//           collection.find({
+//             $query: {
+//               userId: {
+//                 $in: [user._id.toString()].concat(user.friends)
+//               }
+//             },
+//             $orderby: {
+//               date: -1
+//             }
+//           }).toArray(function(err, result) {
+//             result.forEach(function(value, index, arr) {
+//               arr[index].id = ObjectId(value.id);
+//               delete arr[index].userId;
+//             });
+//             response({
+//               posts: result
+//             }, res);
+//           });
+//         });
+//       }, req, res);
+//       break;
+//   case 'POST':
+//     processPOSTRequest(req, function(data) {
+//       if(!data.text || data.text === '') {
+//         error('Please add some text.', res);
+//       } else {
+//         getDatabaseConnection(function(db) {
+//           getCurrentUser(function(user) {
+//             var collection = db.collection('content');
+//             data.userId = user._id.toString();
+//             data.userName = user.firstName + ' ' + user.lastName;
+//             data.date = new Date();
+//             collection.insert(data, function(err, docs) {
+//               response({
+//                 success: 'OK'
+//               }, res);
+//             });
+//           }, req, res);
+//         });
+//       }
+//     });
+//   break;
+// };
+
   var user;
   if(req.session && req.session.user) {
     user = req.session.user;
   } else {
     error('You must be logged in in order to use this method.', res);
+    return;
   }
-
   switch(req.method) {
     case 'GET':
       getCurrentUser(function(user) {
-        if (!user.friends) {
+        if(!user.friends) {
           user.friends = [];
         }
         getDatabaseConnection(function(db) {
           var collection = db.collection('content');
-          collection.find({
+          collection.find({ 
             $query: {
-              userId: {
-                $in: [user._id.toString()].concat(user.friends)
-              }
+              userId: { $in: [user._id.toString()].concat(user.friends) }
             },
             $orderby: {
               date: -1
@@ -336,112 +394,55 @@ Router
           });
         });
       }, req, res);
-      break;
-  case 'POST':
-    processPOSTRequest(req, function(data) {
-      if(!data.text || data.text === '') {
-        error('Please add some text.', res);
-      } else {
-        getDatabaseConnection(function(db) {
-          getCurrentUser(function(user) {
-            var collection = db.collection('content');
-            data.userId = user._id.toString();
-            data.userName = user.firstName + ' ' + user.lastName;
-            data.date = new Date();
-            collection.insert(data, function(err, docs) {
-              response({
-                success: 'OK'
-              }, res);
-            });
-          }, req, res);
-        });
-      }
-    });
-  break;
-};
-
-  // var user;
-  // if(req.session && req.session.user) {
-  //   user = req.session.user;
-  // } else {
-  //   error('You must be logged in in order to use this method.', res);
-  //   return;
-  // }
-  // switch(req.method) {
-  //   case 'GET':
-  //     getCurrentUser(function(user) {
-  //       if(!user.friends) {
-  //         user.friends = [];
-  //       }
-  //       getDatabaseConnection(function(db) {
-  //         var collection = db.collection('content');
-  //         collection.find({ 
-  //           $query: {
-  //             userId: { $in: [user._id.toString()].concat(user.friends) }
-  //           },
-  //           $orderby: {
-  //             date: -1
-  //           }
-  //         }).toArray(function(err, result) {
-  //           result.forEach(function(value, index, arr) {
-  //             arr[index].id = ObjectId(value.id);
-  //             delete arr[index].userId;
-  //           });
-  //           response({
-  //             posts: result
-  //           }, res);
-  //         });
-  //       });
-  //     }, req, res);
-  //   break;
-  //   case 'POST':
-  //     var uploadDir = __dirname + '/../static/uploads/';
-  //     var formidable = require('formidable');
-  //     var form = new formidable.IncomingForm();
-  //     form.multiples = true;
-  //     var util = require('util');
-  //     console.log('form.parse req ' + util.inspect(req));
-  //     form.parse(req, function(err, data, files) {
-  //       console.log('err is ' + err);
-  //       if(!data.text || data.text === '') {
-  //         var util = require('util');
-  //         console.log('data is ' + util.inspect(data));
-  //       } else {
-  //         var processFiles = function(userId, callback) {
-  //           if(files.files) {
-  //             var fileName = userId + '_' + files.files.name;
-  //             var filePath = uploadDir + fileName;
-  //             fs.rename(files.files.path, filePath, function(err) {
-  //               if(err) throw err;
-  //               callback(fileName);
-  //             });
-  //           } else {
-  //             callback();
-  //           }
-  //         };
-  //         var done = function() {
-  //           response({
-  //             success: 'OK'
-  //           }, res);
-  //         }
-  //         getDatabaseConnection(function(db) {
-  //           getCurrentUser(function(user) {
-  //             var collection = db.collection('content');
-  //             data.userId = user._id.toString();
-  //             data.userName = user.firstName + ' ' + user.lastName;
-  //             data.date = new Date();
-  //             processFiles(user._id, function(file) {
-  //               if(file) {
-  //                 data.file = file;
-  //               }
-  //               collection.insert(data, done);
-  //             });
-  //           }, req, res);
-  //         });
-  //       }
-  //     });
-  //   break;
-  // };
+    break;
+    case 'POST':
+      var uploadDir = __dirname + '/../static/uploads/';
+      var formidable = require('formidable');
+      var form = new formidable.IncomingForm();
+      form.multiples = true;
+      // var util = require('util');
+      // console.log('form.parse req ' + util.inspect(req));
+      form.parse(req, function(err, data, files) {
+        // console.log('err is ' + err);
+        if(!data.text || data.text === '') {
+          var util = require('util');
+          console.log('data is ' + util.inspect(data));
+        } else {
+          var processFiles = function(userId, callback) {
+            if(files.files) {
+              var fileName = userId + '_' + files.files.name;
+              var filePath = uploadDir + fileName;
+              fs.rename(files.files.path, filePath, function(err) {
+                if(err) throw err;
+                callback(fileName);
+              });
+            } else {
+              callback();
+            }
+          };
+          var done = function() {
+            response({
+              success: 'OK'
+            }, res);
+          }
+          getDatabaseConnection(function(db) {
+            getCurrentUser(function(user) {
+              var collection = db.collection('content');
+              data.userId = user._id.toString();
+              data.userName = user.firstName + ' ' + user.lastName;
+              data.date = new Date();
+              processFiles(user._id, function(file) {
+                if(file) {
+                  data.file = file;
+                }
+                collection.insert(data, done);
+              });
+            }, req, res);
+          });
+        }
+      });
+    break;
+  };
 })
 .add(function(req, res) {
   response({
