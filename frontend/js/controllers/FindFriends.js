@@ -25,7 +25,6 @@ module.exports = Ractive.extend({
       var searchFor = this.get('friendName');
       model.find(searchFor, function(err, res) {
         self.set('loading', false);
-        console.log(res);
         if (res.friends && res.friends.length > 0) {
           self.set('foundFriends', res.friends);
         } else {
