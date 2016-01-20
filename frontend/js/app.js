@@ -5,6 +5,7 @@ var Login = require('./controllers/Login');
 var Profile = require('./controllers/Profile');
 var UserModel = require('./models/User');
 var FindFriends = require('./controllers/FindFriends');
+var PostContent = require('./controllers/PostContent');
 var currentPage;
 var body;
 
@@ -53,6 +54,15 @@ window.onload = function() {
     .add('find-friends', function() {
       if (userModel.isLogged()) {
         var p = new FindFriends();
+        showPage(p);
+      } else {
+        Router.navigate('login');
+      }
+    })
+    .add('post-content', function() {
+      if (userModel.isLogged()) {
+        console.log('show page post-content' );
+        var p = new PostContent();
         showPage(p);
       } else {
         Router.navigate('login');
