@@ -273,6 +273,7 @@ Router
         return response({ friends: [] }, res);
       }
       if(user.friends && user.friends.length > 0)  {
+        console.log('type of user.friends '  + (typeof user.friends));
         user.friends.forEach(function(value, index, arr) {
           arr[index] = ObjectId(value);
         });
@@ -308,6 +309,34 @@ Router
   }
 
   switch(req.method) {
+    case 'GET':
+      getCurrentUser(function(user) {
+        if (!user.friends) {
+          user.friends = [];
+        }
+        getDatabaseConnection(function(db) {
+          var collection = db.collection('content');
+          collection.find({
+            $query: {
+              userId: {
+                $in: [user._id.toString()].concat(user.friends)
+              }
+            },
+            $orderby: {
+              date: -1
+            }
+          }).toArray(function(err, result) {
+            result.forEach(function(value, index, arr) {
+              arr[index].id = ObjectId(value.id);
+              delete arr[index].userId;
+            });
+            response({
+              posts: result
+            }, res);
+          });
+        });
+      }, req, res);
+      break;
   case 'POST':
     processPOSTRequest(req, function(data) {
       if(!data.text || data.text === '') {
