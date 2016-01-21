@@ -13,5 +13,14 @@
         <textarea value="{{description}}"></textarea>
         <input type="button" value="Create" on-click="create" />
     </form>
+
+    {{#each pages:index}}
+    <div class="content-item">
+        <h2>{{pages[index].title}}</h2>
+        <p><small>Created by {{pages[index].userName}}</small></p>
+        <p>{{pages[index].description}}</p>
+        <p><a href="/pages/{{pages[index].id}}" class="button">Visit the page</a></p>
+    </div>
+    {{/each}}
     <appfooter />
 </div>
