@@ -1,0 +1,17 @@
+<div id="wrapper" class="container">
+    <header />
+    <navigation />
+    <form enctype="multipart/form-data" method="post">
+        <h3>Add a new page</h3> {{#if error && error != ''}}
+        <div class="error">{{error}}</div>
+        {{/if}} {{#if success && success != ''}}
+        <div class="success">{{{success}}}</div>
+        {{/if}}
+        <label>Title</label>
+        <textarea value="{{title}}"></textarea>
+        <label>Description</label>
+        <textarea value="{{description}}"></textarea>
+        <input type="button" value="Create" on-click="create" />
+    </form>
+    <appfooter />
+</div>
