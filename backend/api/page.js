@@ -16,13 +16,15 @@ module.exports = function(req, res, params) {
   switch (req.method) {
     case 'GET':
       getDatabaseConnection(function(db) {
-        var collection = db.collection('pages');
+        var collection = db.collection('page');
         collection.find({
           $query: {},
           $orderby: {
             date: -1
           }
         }).toArray(function(err, result) {
+          var util = require('util');
+          console.log(util.inspect(result));
           result.forEach(function(value, index, arr) {
             arr[index].id = value._id;
             delete arr[index].userId;
