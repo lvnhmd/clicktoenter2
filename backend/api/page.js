@@ -24,7 +24,6 @@ module.exports = function(req, res, params) {
           }
         }).toArray(function(err, result) {
           var util = require('util');
-          console.log(util.inspect(result));
           result.forEach(function(value, index, arr) {
             arr[index].id = value._id;
             delete arr[index].userId;

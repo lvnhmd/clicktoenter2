@@ -19,7 +19,6 @@ module.exports = function(req, res) {
             email: data.email,
             password: sha1(data.password)
           }).toArray(function(err, result) {
-            console.log('API.js api/user/login ' + data.email + ' , ' + sha1(data.password));
             if (result.length === 0) {
               error('Wrong email or password', res);
             } else {

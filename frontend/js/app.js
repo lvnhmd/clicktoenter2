@@ -62,7 +62,6 @@ window.onload = function() {
     })
     .add('post-content', function() {
       if (userModel.isLogged()) {
-        console.log('show page post-content' );
         var p = new PostContent();
         showPage(p);
       } else {

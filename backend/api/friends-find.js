@@ -9,14 +9,12 @@ var getCurrentUser = helpers.getCurrentUser;
 
 module.exports = function(req, res) {
 
-    console.log('API.js api/friends/find');
     if (req.session && req.session.user) {
       if (req.method === 'POST') {
         var findFriends = function(db, searchFor, currentFriends) {
           var collection = db.collection('user');
           var regExp = new RegExp(searchFor, 'gi');
           var excludeEmails = [req.session.user.email];
-          console.log('search for ' + regExp + ' , excludeEmails ', excludeEmails);
           currentFriends.forEach(function(value, index, arr) {
             arr[index] = ObjectId(value);
           });

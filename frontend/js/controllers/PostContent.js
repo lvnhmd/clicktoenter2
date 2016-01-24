@@ -17,6 +17,7 @@ module.exports = Ractive.extend({
       var ContentModel = require('../models/Content');
       var model = new ContentModel();
       var self = this;
+     
       this.on('post', function() {
         var files = this.find('input[type="file"]').files;
         var formData = new FormData();
@@ -54,7 +55,6 @@ module.exports = Ractive.extend({
       var friendModel = new FriendModel();
       var getFriends = function() {
         friendModel.fetch(function(err, result) {
-          console.log('FOUND FRIENDS! ' + util.inspect(result.friends));
           if (!err) {
             self.set('PFriends', result.friends);
           }

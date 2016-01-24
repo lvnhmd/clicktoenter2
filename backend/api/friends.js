@@ -9,13 +9,11 @@ module.exports = function(req, res) {
     if (req.session && req.session.user) {
       getCurrentUser(function(user) {
         if (!user.friends || user.friends.length === 0) {
-          console.log('aww, no friends for ' + user.firstName);
           return response({
             friends: []
           }, res);
         }
         if (user.friends && user.friends.length > 0) {
-          console.log('type of user.friends ' + (typeof user.friends));
           user.friends.forEach(function(value, index, arr) {
             arr[index] = ObjectId(value);
           });

@@ -51,7 +51,6 @@ module.exports = function(req, res) {
       }
     });
   }
-  // console.log('will read ' + __dirname + '/..' + req.url);
   readFile(path.normalize(__dirname + '/..' + req.url));
 
 }
