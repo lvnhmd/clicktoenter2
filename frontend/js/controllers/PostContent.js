@@ -44,7 +44,7 @@ module.exports = Ractive.extend({
     
       var getPosts = function() {
         model.fetch(function(err, result) {
-          console.log('FOUND POSTS! ' + util.inspect(result.posts));
+          console.log('FOUND POSTS ' + util.inspect(result.posts));
           if (!err) {
             self.set('posts', result.posts);
           }
@@ -55,6 +55,7 @@ module.exports = Ractive.extend({
       var friendModel = new FriendModel();
       var getFriends = function() {
         friendModel.fetch(function(err, result) {
+          console.log('FOUND FRIENDS ' + util.inspect(result.friends));
           if (!err) {
             self.set('PFriends', result.friends);
           }

@@ -361,7 +361,7 @@ input::-moz-focus-inner {
 ================================================== */
 
 input, textarea {
-  -webkit-appearance: none;
+  /*-webkit-appearance: none;*/
   -webkit-border-radius: 0;
 }
 form {

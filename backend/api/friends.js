@@ -26,8 +26,9 @@ module.exports = function(req, res) {
             }
           }).toArray(function(err, result) {
             result.forEach(function(value, index, arr) {
-              arr[index].id = value.id;
+              arr[index].id = value._id;
               delete arr[index].password;
+              delete arr[index].friends;
               delete arr[index].email;
               delete arr[index]._id;
             });
