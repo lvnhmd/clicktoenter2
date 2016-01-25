@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang='en-GB'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Ractive test</title>
+    <link href="./modal.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<body>
+    <h1>Ractive test</h1>
+    <!--
+       1. This is the element we'll render our Ractive to.
+  -->
+    <div id='container'></div>
+    <!--
+       2. You can load a template in many ways. For convenience, we'll include it in
+       a script tag so that we don't need to mess around with AJAX or multiline strings.
+       Note that we've set the type attribute to 'text/ractive' - though it can be
+       just about anything except 'text/javascript'
+  -->
+    <script id='modalTemplate' type='text/ractive'>
+      <div class='modal-background' on-click='close' intro='fade' outro='fade'>
+        <div class='modal-outer'>
+            <div class='modal'>
+                {{>modalContent}}
+            </div>
+        </div>
+      </div>
+    </script>
+
+    <!--
+       3. You can always get the most recent stable version from the URL below.
+       If you want the newest features (unstable!), use the 'edge' version instead:
+
+           http://cdn.ractivejs.org/edge/ractive.min.js
+
+       If you need IE8 support, change 'ractive' to 'ractive-legacy'.
+  -->
+    <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+    <!--
+       4. We've got an element in the DOM, we've created a template, and we've
+       loaded the library - now it's time to build our Hello World app.
+  -->
+    <script>
+    // Create our Modal subclass
+    Modal = Ractive.extend({
+      // by default, the modal should sit atop the <body>...
+      // el: document.body,
+      el: document.body,
+
+      // ...but it should append to it rather than overwriting its contents
+      append: true,
+
+      // all Modal instances will share a template (though you can override it
+      // on a per-instance basis, if you really want to)
+      template: '#modalTemplate',
+
+      // the onrender function will be called as soon as the instance has
+      // finished rendering
+      onrender: function () {
+        var self = this, resizeHandler;
+
+        // store references to the background, and to the modal itself
+        // we'll assume we're in a modern browser and use querySelector
+        this.outer = this.find( '.modal-outer' );
+        this.modal = this.find( '.modal' );
+
+        // if the user taps on the background, close the modal
+        this.on( 'close', function ( event ) {
+          if ( !this.modal.contains( event.original.target ) ) {
+            this.teardown();
+          }
+        });
+
+        // when the window resizes, keep the modal horizontally and vertically centred
+        window.addEventListener( 'resize', resizeHandler = function () {
+          self.center();
+        }, false );
+
+        // clean up after ourselves later
+        this.on( 'teardown', function () {
+          window.removeEventListener( 'resize', resizeHandler );
+        }, false );
+
+        // manually call this.center() the first time
+        this.center();
+      },
+
+      center: function () {
+        var outerHeight, modalHeight, verticalSpace;
+
+        // horizontal centring is taken care of by CSS, but we need to
+        // vertically centre
+        outerHeight = this.outer.clientHeight;
+        modalHeight = this.modal.clientHeight;
+
+        verticalSpace = ( outerHeight - modalHeight ) / 2;
+
+        this.modal.style.top = verticalSpace + 'px';
+      }
+    });
+
+    // We can now instantiate our modal
+    basicModal = new Modal({
+      partials: {
+        modalContent: '<p>This is some important content!</p><a class="modal-button" on-click="okay">Okay</a>'
+      }
+    });
+
+    basicModal.on( 'okay', function () {
+      this.teardown();
+    });
+    </script>
+</body>
+
+</html>

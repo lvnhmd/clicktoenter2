@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang='en-GB'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Ractive test</title>
+</head>
+
+<body>
+    <h1>Ractive test</h1>
+    <!--
+       1. This is the element we'll render our Ractive to.
+  -->
+    <div id='container'></div>
+    <!--
+       2. You can load a template in many ways. For convenience, we'll include it in
+       a script tag so that we don't need to mess around with AJAX or multiline strings.
+       Note that we've set the type attribute to 'text/ractive' - though it can be
+       just about anything except 'text/javascript'
+  -->
+    <script id='template' type='text/ractive'>
+        <div class='slideshow'>
+            <div class='main'>
+                <a class='prev' on-click='goto:{{current-1}}'><span>&laquo;</span></a>
+                <img src={{image.src}} alt="meh" />
+                <a class='next' on-click='goto:{{current+1}}'><span>&raquo;</span></a> 
+            </div>
+            <div class='caption'>
+                <p>{{image.caption}}</p>
+            </div>
+        </div>
+    </script>
+
+    <!--
+       3. You can always get the most recent stable version from the URL below.
+       If you want the newest features (unstable!), use the 'edge' version instead:
+
+           http://cdn.ractivejs.org/edge/ractive.min.js
+
+       If you need IE8 support, change 'ractive' to 'ractive-legacy'.
+  -->
+    <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+    <!--
+       4. We've got an element in the DOM, we've created a template, and we've
+       loaded the library - now it's time to build our Hello World app.
+  -->
+    <script>
+    var Slideshow = Ractive.extend({
+        // this will be applied to all Slideshow instances
+        template: '#template',
+
+        // method for changing the currently displayed image
+        goto: function(imageNum) {
+            var images = this.get('images');
+
+            // Make sure the image number is between 0...
+            while (imageNum < 0) {
+                imageNum += images.length;
+            }
+
+            // ...and the maximum
+            imageNum %= images.length;
+
+            // Then, update the view
+            this.set({
+                image: images[imageNum],
+                current: imageNum
+            });
+        },
+
+        // initialisation code
+        oninit: function(options) {
+            this.on('goto', function(event, index) {
+                this.goto(index);
+            });
+
+            // start with the first image
+            this.goto(0);
+        }
+    });
+
+    var slideshow = new Slideshow({
+        el: '#container',
+        data: {
+            images: [
+              {
+                "src": "http://33.media.tumblr.com/186a06c20c9a47286b3f1bc252fc7496/tumblr_inline_o1hgq0PL6H1raprkq_500.gif",
+                "caption": "Trying to work out a problem after the 5th hour"
+              },
+              {
+                "src": "./gifs/css.gif",
+                "caption": "Trying to fix someone else's CSS"
+              },
+              {
+                "src": "./gifs/ie.gif",
+                "caption": "Testing interface on Internet Explorer"
+              },
+              {
+                "src": "./gifs/w3c.gif",
+                "caption": "Trying to code to W3C standards"
+              },
+              {
+                "src": "./gifs/build.gif",
+                "caption": "Visiting the guy that wrote the build scripts"
+              },
+              {
+                "src": "./gifs/test.gif",
+                "caption": "I don't need to test that. What can possibly go wrong?"
+              }
+            ]
+        }
+    });
+    </script>
+</body>
+
+</html>

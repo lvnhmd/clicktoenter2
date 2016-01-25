@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang='en-GB'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Ractive test</title>
+    <link href="./modal.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<body>
+    <h1>Ractive test</h1>
+    <!--
+       1. This is the element we'll render our Ractive to.
+  -->
+    <div id='container'></div>
+    <!--
+       2. You can load a template in many ways. For convenience, we'll include it in
+       a script tag so that we don't need to mess around with AJAX or multiline strings.
+       Note that we've set the type attribute to 'text/ractive' - though it can be
+       just about anything except 'text/javascript'
+  -->
+    <script id='template' type='text/ractive'>
+    <h2>To-do list</h2>
+
+    <input on-change='newTodo' on-enter='blur' placeholder='What needs to be done?'>
+
+    <ul class='todos'>
+      {{#each items:i}}
+        {{>item}}
+      {{/each}}
+    </ul>
+
+    {{#partial item}}
+    <li class='{{ done ? "done" : "pending" }}'>
+      <input type='checkbox' checked='{{done}}'>
+      <span on-tap='edit'>
+        {{description}}
+
+        {{#if editing}}
+          <input class='edit' value='{{description}}' on-blur='stop_editing'>
+        {{/if}}
+      </span>
+      <a class='button' on-tap='remove'>x</a>
+    </li>
+  {{/partial}}
+
+
+    </script>
+
+
+    <!--
+       3. You can always get the most recent stable version from the URL below.
+       If you want the newest features (unstable!), use the 'edge' version instead:
+
+           http://cdn.ractivejs.org/edge/ractive.min.js
+
+       If you need IE8 support, change 'ractive' to 'ractive-legacy'.
+  -->
+    <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+    <!--
+       4. We've got an element in the DOM, we've created a template, and we've
+       loaded the library - now it's time to build our Hello World app.
+  -->
+    <script>
+ 
+  var TodoList = Ractive.extend({
+  template: '#template',
+
+ 
+  
+
+  addItem: function ( description ) {
+    this.push( 'items', {
+      description: description,
+      done: false
+    });
+  },
+
+  removeItem: function ( index ) {
+    this.splice( 'items', index, 1 );
+  },
+
+  editItem: function ( index ) {
+    var self = this, keydownHandler, blurHandler, input, currentDescription;
+
+    currentDescription = this.get( 'items.' + index + '.description' );
+    this.set( 'items.' + index + '.editing', true );
+
+    input = this.find( '.edit' );
+    input.select();
+
+    window.addEventListener( 'keydown', keydownHandler = function ( event ) {
+      switch ( event.which ) {
+        case 13: // ENTER
+        input.blur();
+        break;
+
+        case 27: // ESCAPE
+        input.value = currentDescription;
+        self.set( 'items.' + index + '.description', currentDescription );
+        input.blur();
+        break;
+
+        case 9: // TAB
+        event.preventDefault();
+        input.blur();
+        self.editItem( ( index + 1 ) % self.get( 'items' ).length );
+        break;
+      }
+    });
+
+    input.addEventListener( 'blur', blurHandler = function () {
+      window.removeEventListener( 'keydown', keydownHandler );
+      input.removeEventListener( 'blur', blurHandler );
+    });
+
+    this.set( 'items.' + index + '.editing', true );
+  },
+
+  oninit: function ( options ) {
+    // proxy event handlers
+    this.on({
+      remove: function ( event ) {
+        this.removeItem( event.index.i );
+      },
+      newTodo: function ( event ) {
+        this.addItem( event.node.value );
+        event.node.value = '';
+        setTimeout( function () {
+          event.node.focus();
+        }, 0 );
+      },
+      edit: function ( event ) {
+        this.editItem( event.index.i );
+      },
+      stop_editing: function ( event ) {
+        this.set( event.keypath + '.editing', false );
+      },
+      blur: function ( event ) {
+        event.node.blur();
+      }
+    });
+  },
+
+  // sadly this is necessary for IE - other browsers fire the change event
+  // when you hit enter
+  events: {
+    enter: function ( node, fire ) {
+      var keydownHandler = function ( event ) {
+        var which = event.which || event.keyCode;
+        if ( which === 13 ) { 
+          fire({ node: node, original: event }); 
+        }
+      };
+
+      node.addEventListener( 'keydown', keydownHandler );
+
+      return {
+        teardown: function () {
+          node.removeEventListener( 'keydown', keydownHandler );
+        }
+      };
+    }
+  }
+});
+
+var ractive = new TodoList({
+  el: '#container',
+  data: {
+    items: [
+      { done: true,  description: 'Add a todo item' },
+      { done: false, description: 'Add some more todo items' },
+      { done: false, description: 'Complete all the Ractive tutorials' }
+    ]
+  }
+});
+
+    </script>
+</body>
+
+</html>
