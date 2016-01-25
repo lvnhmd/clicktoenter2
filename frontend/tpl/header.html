@@ -13,8 +13,8 @@
         <!-- http://designmuseumshop.com/account/login -->
         <li>
             {{#if !isLogged }}
-                <a on-click="goto:login" id="customer_login_link">Login</a> |
-                <a on-click="goto:register" id="customer_signin_link">Create an account</a>
+                <a on-click="goto:login" id="customer_login_link">Login</a> 
+                <!-- | <a on-click="goto:register" id="customer_signin_link">Create an account</a> -->
             {{else}}
                  <a on-click="goto:profile">My account</a> |
                  <a on-click="goto:logout">Logout</a> |
