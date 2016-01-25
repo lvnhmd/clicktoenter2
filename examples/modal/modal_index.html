@@ -13,6 +13,9 @@
        1. This is the element we'll render our Ractive to.
   -->
     <div id='container'></div>
+
+    <a href="javascript:login()">Login</a>
+    
     <!--
        2. You can load a template in many ways. For convenience, we'll include it in
        a script tag so that we don't need to mess around with AJAX or multiline strings.
@@ -98,19 +101,25 @@
         verticalSpace = ( outerHeight - modalHeight ) / 2;
 
         this.modal.style.top = verticalSpace + 'px';
-      }
-    });
+      },
+      
+      
 
-    // We can now instantiate our modal
-    basicModal = new Modal({
-      partials: {
-        modalContent: '<p>This is some important content!</p><a class="modal-button" on-click="okay">Okay</a>'
-      }
     });
+  
+    function login () {
+        // We can now instantiate our modal
+        basicModal = new Modal({
+          partials: {
+            modalContent: '<p>This is some important content!</p><a class="modal-button" on-click="okay">Okay</a>'
+          }
+        });
 
-    basicModal.on( 'okay', function () {
-      this.teardown();
-    });
+        basicModal.on( 'okay', function () {
+          this.teardown();
+        });
+    }
+    
     </script>
 </body>
 
