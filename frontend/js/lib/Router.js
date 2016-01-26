@@ -7,32 +7,42 @@ module.exports = function() {
       fragment = this.clearSlashes(decodeURI(location.pathname + location.search));
       fragment = fragment.replace(/\?(.*)$/, '');
       fragment = this.root != '/' ? fragment.replace(this.root, '') : fragment;
+      console.log(fragment);
       return this.clearSlashes(fragment);
     },
     clearSlashes: function(path) {
       return path.toString().replace(/\/$/, '').replace(/^\//, '');
     },
-    add: function(re, handler) {
-      if(typeof re == 'function') {
-        handler = re;
-        re = '';
+    add: function(route, handler) {
+      if (typeof route == 'function') {
+        handler = route;
+        route = '';
       }
-      this.routes.push({ re: re, handler: handler});
+      this.routes.push({
+        route: route,
+        handler: handler
+      });
       return this;
     },
     check: function(f, params) {
-      var fragment = typeof f !== 'undefined' ? f.replace(/^\//, '') : this.getFragment(), vars;
-      for(var i=0; i<this.routes.length; i++) {
-        var match, re = this.routes[i].re;
-        re = re.replace(/^\//, '');
-        var vars = re.match(/:[^\s/]+/g);
-        var r = new RegExp('^' + re.replace(/:[^\s/]+/g, '([\\w-]+)'));
+
+      var fragment, vars;
+      if (typeof f !== 'undefined') {
+        fragment = f.replace(/^\//, '');
+      } else {
+        fragment = this.getFragment();
+      }
+      for (var i = 0; i < this.routes.length; i++) {
+        var match, route = this.routes[i].route;
+        route = route.replace(/^\//, '');
+        var vars = route.match(/:[^\s/]+/g);
+        var r = new RegExp('^' + route.replace(/:[^\s/]+/g, '([\\w-]+)'));
         match = fragment.match(r);
-        if(match) {
+        if (match) {
           match.shift();
           var matchObj = {};
-          if(vars) {
-            for(var j=0; j<vars.length; j++) {
+          if (vars) {
+            for (var j = 0; j < vars.length; j++) {
               var v = vars[j];
               matchObj[v.substr(1, v.length)] = match[j];
             }
@@ -59,7 +69,21 @@ module.exports = function() {
     navigate: function(path) {
       path = path ? path : '';
       history.pushState(null, null, this.root + this.clearSlashes(path));
+      // The preceding code uses the HTML5 history API 
+      return this;
+    },
+    modal: function(path) {
+      //here I should set the path to the "previous" path because I want to stay on that page 
+      path = path ? path : '';
+      // history.pushState(null, null, this.root + this.clearSlashes(path));
+      // The preceding code uses the HTML5 history API 
+      return this;
+    },
+    info: function() {
+      var util = require('util');
+      console.log('Supported routes : \n' + util.inspect(this.routes));
       return this;
     }
+
   }
 };
