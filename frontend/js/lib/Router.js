@@ -7,7 +7,7 @@ module.exports = function() {
       fragment = this.clearSlashes(decodeURI(location.pathname + location.search));
       fragment = fragment.replace(/\?(.*)$/, '');
       fragment = this.root != '/' ? fragment.replace(this.root, '') : fragment;
-      console.log(fragment);
+      // console.log(fragment);
       return this.clearSlashes(fragment);
     },
     clearSlashes: function(path) {
@@ -69,13 +69,6 @@ module.exports = function() {
     navigate: function(path) {
       path = path ? path : '';
       history.pushState(null, null, this.root + this.clearSlashes(path));
-      // The preceding code uses the HTML5 history API 
-      return this;
-    },
-    modal: function(path) {
-      //here I should set the path to the "previous" path because I want to stay on that page 
-      path = path ? path : '';
-      // history.pushState(null, null, this.root + this.clearSlashes(path));
       // The preceding code uses the HTML5 history API 
       return this;
     },

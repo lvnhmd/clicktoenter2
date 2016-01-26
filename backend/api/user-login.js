@@ -7,6 +7,7 @@ var getDatabaseConnection = helpers.getDatabaseConnection;
 var error = helpers.error;
 
 module.exports = function(req, res) {
+    console.log('made it to api/user-login');
     processPOSTRequest(req, function(data) {
       if (!data.email || data.email === '' || !validEmail(data.email)) {
         error('Invalid or missing email.', res);

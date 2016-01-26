@@ -1,28 +1,23 @@
 <!-- <div id="wrapper" class="container">
 <header />
-<navigation />
-<form>
-  {{#if error && error != ''}}
-    <div class="error">{{error}}</div>
-  {{/if}}
-  {{#if success && success != ''}}
-    <div class="success">{{{success}}}</div>
-  {{else}}
-    <label for="email">Email</label>
-    <input type="text" id="email" value="{{email}}" />
-    <label for="password">Password</label>
-    <input type="password" id="password" value="{{password}}" />
-    <input type="button" value="login" on-click="login" />
-  {{/if}}
-</form>
-<appfooter />
-</div> -->
-
-
-<div class='modal-background' on-click='close' intro='fade' outro='fade'>
+<navigation /> -->
+<div class='modal-background' on-click='close'>
     <div class='modal-outer'>
         <div class='modal'>
-            {{>modalContent}}
+            <form>
+                {{#if error && error != ''}}
+                <div class="error">{{error}}</div>
+                {{/if}} {{#if success && success != ''}}
+                <div class="success">{{{success}}}</div>
+                {{else}}
+                <label for="email">Email</label>
+                <input type="text" id="email" value="{{email}}" />
+                <label for="password">Password</label>
+                <input type="password" id="password" value="{{password}}" />
+                <input type="button" value="login" on-click="login" /> {{/if}}
+            </form>
         </div>
     </div>
 </div>
+<!-- <appfooter />
+</div> -->
