@@ -6,7 +6,10 @@ module.exports = Ractive.extend({
     content: require('../views/Content'),
     appfooter: require('../views/Footer')
   },
-  onrender: function() {
-    console.log('Home page rendered');
+  oninit: function() {
+    var header = this.findComponent('header');
+    this.observe('user', function(n) {
+      header.reset(n);
+    });
   }
 });

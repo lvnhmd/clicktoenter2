@@ -7,7 +7,6 @@ module.exports = Ractive.extend({
 		navigation: require('../views/Navigation'),
 		appfooter: require('../views/Footer')
 	},
-	data: {},
 	onrender: function() {
 		var model = new PagesModel();
 		var self = this;

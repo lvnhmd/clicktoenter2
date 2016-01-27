@@ -7,8 +7,10 @@ module.exports = Ractive.extend({
     navigation: require('../views/Navigation'),
     appfooter: require('../views/Footer')
   },
-  data: {
-    friends: []
+  data: function() {
+    return {
+      friends: []
+    };
   },
   onrender: function() {
     var self = this;

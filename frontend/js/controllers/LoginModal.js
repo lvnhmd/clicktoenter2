@@ -1,3 +1,5 @@
+    var util = require('util');
+
     // Create our Modal subclass
     module.exports = Ractive.extend({
       // by default, the modal should sit atop the <body>...
@@ -9,7 +11,7 @@
 
       // all Modal instances will share a template (though you can override it
       // on a per-instance basis, if you really want to)
-      template : require('../../tpl/login'),
+      template: require('../../tpl/login'),
 
       // the onrender function will be called as soon as the instance has
       // finished rendering
@@ -43,18 +45,18 @@
         // manually call this.center() the first time
         this.center();
 
-        this.observe('email', userModel.setter('email'));
-        this.observe('password', userModel.setter('password'));
+        this.observe('email', user.setter('email'));
+        this.observe('password', user.setter('password'));
         this.on('login', function() {
-          userModel.login(function(error, result) {
-            if(error) {
+          user.login(function(error, result) {
+            // console.log('userModel on login ' + util.inspect(userModel) );
+            if (error) {
               self.set('error', error.error);
             } else {
               self.set('error', false);
-              // window.location.href = '/';
-              self.fire( 'loginsuccess');
-              self.teardown();
               //refresh header
+              self.fire('loginsuccess');
+              self.teardown();
             }
           });
         });
@@ -72,4 +74,4 @@
 
         this.modal.style.top = verticalSpace + 'px';
       },
-  });
+    });

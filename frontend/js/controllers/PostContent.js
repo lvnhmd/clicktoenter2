@@ -8,9 +8,11 @@ module.exports = Ractive.extend({
     appfooter: require('../views/Footer')
 
   },
-  data: {
-    posting: true,
-    taggedFriends: []
+  data: function() {
+    return {
+      posting: true,
+      taggedFriends: []
+    };
   },
   onrender: function() {
     if (userModel.isLogged()) {

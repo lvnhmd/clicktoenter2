@@ -1,33 +1,22 @@
 <div id="header" class="row">
     <div id="logo" class="desktop-6 tablet-4 mobile-3">
-        <a on-click="goto:home"><img src="./static/images/logo_dm_webshop.svg" alt="Design Museum Shop" style="border: 0;"></a>
+        <a on-click="goto:home"><img src="./static/images/logo_dm_webshop.svg" alt="" style="border: 0;"></a>
     </div>
     <div id="search" class="desktop-3 tablet-1 mobile-6">
-        <!-- http://designmuseumshop.com/search -->
         <form action="#" method="get">
             <i class="fa fa-search"></i>
             <input type="text" name="q" id="q" class="search-field" placeholder="Search">
         </form>
     </div>
-    
     <ul id="cart" class="desktop-6 tablet-3 mobile-3">
-        <!-- http://designmuseumshop.com/account/login -->
         <li>
             {{#if !isLogged }}
-                <!-- <a on-click="modal:login" id="customer_login_link">Login</a>  -->
                 <a on-click="modal:login" id="customer_login_link">Login</a> 
-                <!-- | <a on-click="goto:register" id="customer_signin_link">Create an account</a> -->
             {{else}}
-                 <a on-click="goto:profile">My account</a> |
-                 <a on-click="goto:logout">Logout</a>
-                 <!-- | <a on-click="goto:find-friends">Find friends</a> |
-                 <a on-click="goto:post-content">Post stuff</a> |
-                 <a on-click="goto:pages">Pages</a> -->
+            <!-- <a on-click="goto:profile">My account</a> | -->
+                <a on-click="goto:logout">Logout</a> 
             {{/if}}
         </li>
     </ul>
-
-
-
 </div>
 <div class="clear"></div>

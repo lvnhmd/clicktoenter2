@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang='en-GB'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Ractive test</title>
+    <link href="./modal.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<body>
+    <h1>Ractive test</h1>
+    <!--
+       1. This is the element we'll render our Ractive to.
+  -->
+    <div id='container'></div>
+
+    <!--
+       2. You can load a template in many ways. For convenience, we'll include it in
+       a script tag so that we don't need to mess around with AJAX or multiline strings.
+       Note that we've set the type attribute to 'text/ractive' - though it can be
+       just about anything except 'text/javascript'
+  -->
+    
+    <script id='template' type='text/ractive'>
+        <button on-click='load("person1")'>Load Person 1</button>
+        <button on-click='load("person2")'>Load Person 2</button>
+        <button on-click='load("place")'>Load Place</button>
+        <br><br><br>
+        <page/>
+    </script>
+
+    <script id='person' type='text/ractive'>
+        <h3>Person</h3>
+        {{#person}}
+        <br>
+        first: <input value="{{ first }}"/>
+        <br>
+        last: <input value="{{ last }}"/>
+        {{/}}
+    </script>
+            
+    <script id='place' type='text/ractive'>
+        <h3>Place</h3>
+        {{#place}}
+        <br>
+        address: <input value="{{ address }}"/>
+        <br>
+        city: <input value="{{ city }}"/>
+        {{/}}
+    </script>
+
+    <!--
+       3. You can always get the most recent stable version from the URL below.
+       If you want the newest features (unstable!), use the 'edge' version instead:
+
+           http://cdn.ractivejs.org/edge/ractive.min.js
+
+       If you need IE8 support, change 'ractive' to 'ractive-legacy'.
+  -->
+    <script src='http://cdn.ractivejs.org/latest/ractive.js'></script>
+    <!--
+       4. We've got an element in the DOM, we've created a template, and we've
+       loaded the library - now it's time to build our Hello World app.
+  -->
+    <script>
+    var data = {
+        person1: {
+            type: 'person',
+            person: {
+                first: 'Bob',
+                last: 'Jones'
+            }
+        },
+        person2: {
+            type: 'person',
+            person: {
+                first: 'Sally',
+                last: 'Smith'
+            }
+        },
+        place: {
+            type: 'place',
+            place: {
+                address: '123 Main St',
+                city: 'Anywhere'
+            }
+        }
+    }
+
+    var Page = Ractive.extend({
+        template: function(p) {
+          var m = this.get( 'model' );
+          return m.type ? p.fromId(m.type) : ' loading...'
+        }
+    })
+
+    var r = new Ractive({
+        el: '#container',
+        template: '#template',
+        data: { model: data.person1  },
+        components: {
+            page: Page
+        },
+        oninit: function(){
+            console.log('on init');
+            var page = this.findComponent('page');
+            this.observe('model', function(n){
+              console.log('will reset page');
+                page.reset(n)
+            })
+        },
+        load: function(load){
+            this.set('model', data[load]);
+        }
+    })
+    
+    </script>
+</body>
+
+</html>

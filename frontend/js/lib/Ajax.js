@@ -1,7 +1,7 @@
 module.exports = {
   request: function(ops) {
     var util = require('util');
-    console.log(util.inspect(ops));
+    // console.log(util.inspect(ops));
     
     if(typeof ops == 'string') ops = { url: ops };
     ops.url = ops.url || '';
