@@ -45,17 +45,16 @@
         // manually call this.center() the first time
         this.center();
 
-        this.observe('email', user.setter('email'));
-        this.observe('password', user.setter('password'));
+        this.observe('email', userModel.setter('email'));
+        this.observe('password', userModel.setter('password'));
         this.on('login', function() {
-          user.login(function(error, result) {
-            // console.log('userModel on login ' + util.inspect(userModel) );
+          userModel.login(function(error, result) {
             if (error) {
               self.set('error', error.error);
             } else {
               self.set('error', false);
               //refresh header
-              self.fire('loginsuccess');
+              self.fire('event_login');
               self.teardown();
             }
           });

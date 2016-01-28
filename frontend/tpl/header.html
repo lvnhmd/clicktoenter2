@@ -10,11 +10,11 @@
     </div>
     <ul id="cart" class="desktop-6 tablet-3 mobile-3">
         <li>
-            {{#if !isLogged }}
-                <a on-click="modal:login" id="customer_login_link">Login</a> 
+            {{#if email}}
+                <a on-click="stayat:logout">Logout</a> 
             {{else}}
             <!-- <a on-click="goto:profile">My account</a> | -->
-                <a on-click="goto:logout">Logout</a> 
+                <a on-click="modal:login">Login</a> 
             {{/if}}
         </li>
     </ul>
